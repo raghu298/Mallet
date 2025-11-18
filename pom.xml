@@ -37,25 +37,133 @@
     </developer>
   </developers>
   <properties>
-    <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
     <encoding>UTF-8</encoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <error-prone.version>2.24.1</error-prone.version>
+    <maven-jacoco-plugin.version>0.8.11</maven-jacoco-plugin.version>
+    <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+    <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
+    <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
   </properties>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <testSourceDirectory>src</testSourceDirectory>
+
+    <plugins>
+
+      <!-- Compile project using Google Error-Prone -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>${maven-compiler-plugin.version}</version>
+            <configuration>
+                <source>17</source>
+                <target>17</target>
+                <showWarnings>true</showWarnings>
+                <compilerArgs>
+                    <arg>-Xlint:all</arg>
+                </compilerArgs>
+            </configuration>
+        </plugin>
+
+        <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>${maven-source-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Javadoc Generation -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.6.3</version>
+            <configuration>
+                <doclint>none</doclint>
+                <source>17</source>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>attach-javadocs</id>
+                    <goals>
+                        <goal>jar</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+
+
+        <!-- Code Coverage Reports -->
+        <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>${maven-jacoco-plugin.version}</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>prepare-agent</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>report</id>
+                    <phase>test</phase>
+                    <goals>
+                        <goal>report</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+
+      <!-- disable signing in order to simplify integration with TravisCI
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      -->
+
+      <!-- Unit tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+        <configuration>
+          <parallel>methods</parallel>
+          <threadCount>5</threadCount>
+          <skipTests>false</skipTests>
+          <systemProperties>
+            <property>
+              <name>java.util.logging.config.file</name>
+              <value>test/resources/logging.properties</value>
+            </property>
+          </systemProperties>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.10</version>
-    </dependency>
-    <dependency>
-      <groupId>org.beanshell</groupId>
-      <artifactId>bsh</artifactId>
-      <version>2.0b4</version>
+      <version>4.13.2</version>
     </dependency>
     <dependency>
       <groupId>jgrapht</groupId>
@@ -93,4 +201,82 @@
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
   </distributionManagement>
+
+  <profiles>
+    <profile>
+      <id>publish-on-github-packages</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>${maven-source-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+      <distributionManagement>
+        <repository>
+          <id>github</id>
+          <name>GitHub Packages</name>
+          <url>https://maven.pkg.github.com/mimno/mallet</url>
+        </repository>
+      </distributionManagement>
+    </profile>
+
+      <!-- Optional Error Prone profile -->
+      <profile>
+          <id>errorprone</id>
+          <build>
+              <plugins>
+                  <plugin>
+                      <groupId>org.apache.maven.plugins</groupId>
+                      <artifactId>maven-compiler-plugin</artifactId>
+                      <version>${maven-compiler-plugin.version}</version>
+                      <configuration>
+                          <release>17</release>
+                          <showWarnings>true</showWarnings>
+                          <compilerArgs>
+                              <arg>-Xplugin:ErrorProne</arg>
+                              <arg>-Xep:ClassName</arg>
+                              <arg>-Xep:DepAnn</arg>
+                              <arg>-Xep:EmptyIf</arg>
+                              <arg>-Xep:NoAllocation</arg>
+                              <arg>-Xep:NumericEquality</arg>
+                              <arg>-Xep:NonCanonicalStaticMemberImport</arg>
+                              <arg>-Xep:PrimitiveArrayPassedToVarargsMethod</arg>
+                              <arg>-Xep:StringEquality</arg>
+                              <arg>-Xep:Var</arg>
+                              <arg>-Xep:WildcardImport</arg>
+                              <arg>-XepDisableWarningsInGeneratedCode</arg>
+                          </compilerArgs>
+                          <annotationProcessorPaths>
+                              <path>
+                                  <groupId>com.google.errorprone</groupId>
+                                  <artifactId>error_prone_core</artifactId>
+                                  <version>${error-prone.version}</version>
+                              </path>
+                          </annotationProcessorPaths>
+                      </configuration>
+                      <dependencies>
+                          <dependency>
+                              <groupId>com.google.errorprone</groupId>
+                              <artifactId>error_prone_core</artifactId>
+                              <version>${error-prone.version}</version>
+                          </dependency>
+                      </dependencies>
+                  </plugin>
+              </plugins>
+          </build>
+      </profile>
+
+
+  </profiles>
 </project>

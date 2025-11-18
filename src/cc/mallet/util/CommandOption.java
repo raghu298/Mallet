@@ -24,7 +24,7 @@ import cc.mallet.util.BshInterpreter;
 
 public abstract class CommandOption
 {
-	static BshInterpreter interpreter;
+	static JShellInterpreter interpreter;
 
 	/** Maps a Java class to the array of CommandOption objects that are owned by it. */
 	static HashMap class2options = new HashMap ();
@@ -59,7 +59,7 @@ public abstract class CommandOption
 		Package p = owner.getPackage();
 		this.fullName = (p != null ? p.toString() : "") + name;
 		if (interpreter == null)
-			interpreter = new BshInterpreter ();
+			interpreter = new JShellInterpreter ();
 		if (owner != CommandOption.class) {
 			CommandOption.List options = (CommandOption.List) class2options.get (owner);
 			if (options == null) {
@@ -133,7 +133,7 @@ public abstract class CommandOption
 		return index;
 	}
 
-	public static BshInterpreter getInterpreter ()
+	public static JShellInterpreter getInterpreter ()
 	{
 		return interpreter;
 	}
@@ -659,10 +659,10 @@ public abstract class CommandOption
 		public void parseArg (java.lang.String arg) {
 			try {
 				value = interpreter.eval (arg);
-			} catch (bsh.EvalError e) {
-				throw new IllegalArgumentException ("Java interpreter eval error\n"+e);
-			}
-		}
+            } catch (Exception e) {
+                throw new IllegalArgumentException ("JShell error evaluating expression: " + arg, e);
+            }
+        }
 		public java.lang.String defaultValueToString() { return defaultValue == null ? null : defaultValue.toString(); }
 		public java.lang.String valueToString() { return value == null ? null : value.toString(); }
 	}
@@ -703,12 +703,15 @@ public abstract class CommandOption
 				java.lang.String parameterName  = nameValuePair[0];
 				java.lang.String parameterValue = nameValuePair[1];  //todo: check for val present!
 				java.lang.Object parameterValueObject;
-				try {
-					parameterValueObject = getInterpreter().eval(parameterValue);
-				} catch (bsh.EvalError e) {
-					throw new IllegalArgumentException ("Java interpreter eval error on parameter "+
-					                                    parameterName + "\n"+e);
-				}
+                try {
+                    parameterValueObject = getInterpreter().eval(parameterValue);
+                } catch (Exception e) {
+                    throw new IllegalArgumentException(
+                            "JShell evaluation error on parameter '" + parameterName +
+                                    "' with value '" + parameterValue + "': " + e.getMessage(),
+                            e
+                    );
+                }
 
 				boolean foundSetter = false;
 				for (int j=0; j<methods.length; j++){
