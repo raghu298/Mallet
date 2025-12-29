@@ -1,7 +1,13 @@
-package cc.mallet.util.tests;
+package cc.mallet.util;
 
-import cc.mallet.util.search.*;
-import junit.framework.*;
+import com.google.errorprone.annotations.Var;
+
+import cc.mallet.util.search.AStar;
+import cc.mallet.util.search.AStarState;
+import cc.mallet.util.search.SearchNode;
+import cc.mallet.util.search.SearchState;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,7 +16,7 @@ import junit.framework.*;
  * Time: 2:36:10 PM
  * Test A* search.
  */
-public class TestAStar extends TestCase {
+public class TestAStar {
   private class State implements AStarState {
     private double to;
     private State next[];
@@ -40,9 +46,8 @@ public class TestAStar extends TestCase {
     }
     public String toString() { return "node " + id; }
   }
-  public TestAStar(String name) {
-    super(name);
-  }
+
+  @Test
   public void testSmall() {
     State node5 = new State(5, 0, 0, true);
     State node6 = new State(6, 0, 0, true);
@@ -74,29 +79,27 @@ public class TestAStar extends TestCase {
     paths[5] = new State[] { node5, node2, node0 };
     costs[5] = 8;
     AStar s = new AStar(new State[] {node0, node1}, 7);
+    @Var
     int i = 0;
     while (s.hasNext()) {
       assertTrue("number of answers > " + i, i < 6);
+      @Var
       SearchNode n = s.nextAnswer();
       assertEquals("costs[" + i + "] != " + n.getPriority(), costs[i],
               n.getPriority(), 1e-5);
+      @Var
       int j = 0;
       while (n != null) {
         assertTrue("path length > " + j, j < 3);
         assertTrue("path[" + i + "][" + j + "] != " + n,
                 paths[i][j] == n.getState());
         j++;
-        n = (SearchNode)n.getParent();
+        n = n.getParent();
       }
       assertTrue("path length != " + j, j == 3);
       i++;
     }
     assertTrue("number of answers != " + i, i == 6);
   }
-  public static Test suite() {
-    return new TestSuite(TestAStar.class);
-  }
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(suite());
-  }
+
 }

@@ -4,31 +4,22 @@
    This software is provided under the terms of the Common Public License,
    version 1.0, as published by http://www.opensource.org.  For further
    information, see the file `LICENSE' included with this distribution. */
-package cc.mallet.types.tests;
+package cc.mallet.types;
 
-import junit.framework.TestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
+import org.junit.Test;
+import static org.junit.Assert.*;
 import java.io.IOException;
 import java.io.Serializable;
-
-import cc.mallet.types.Alphabet;
 import cc.mallet.types.Label;
 import cc.mallet.types.LabelAlphabet;
 
 /**
  * Created: Nov 24, 2004
  *
- * @author <A HREF="mailto:casutton@cs.umass.edu>casutton@cs.umass.edu</A>
+ * @author <A HREF="mailto:casutton@cs.umass.edu">casutton@cs.umass.edu</A>
  * @version $Id: TestLabelAlphabet.java,v 1.1 2007/10/22 21:37:55 mccallum Exp $
  */
-public class TestLabelAlphabet extends TestCase {
-
-  public TestLabelAlphabet (String name)
-  {
-    super (name);
-  }
+public class TestLabelAlphabet {
 
   private static class Labelee implements Serializable {
     LabelAlphabet dict;
@@ -40,11 +31,15 @@ public class TestLabelAlphabet extends TestCase {
       this.theLabel = theLabel;
     }
 
+    @Override public String toString() {
+        return dict.toString() + "\n" + theLabel.toString();
+    }
   }
 
   /** Tests how serializing labels separately can lead to big losses.
    *   This currently fails.  I'm not sure what to do about this. -cas
    */
+  @Test
   public void testReadResolve () throws IOException, ClassNotFoundException
   {
     LabelAlphabet dict = new LabelAlphabet ();
@@ -57,31 +52,14 @@ public class TestLabelAlphabet extends TestCase {
     Labelee l = new Labelee (dict, t1);
     Labelee l2 = (Labelee) TestSerializable.cloneViaSerialization (l);
 
+    System.out.println(l);
+    System.out.println(l2);
+
+    // DM: Changing this from identity comparison (==) to value comparison (.equals()). LabelAlphabet does not serialize the Label objects, but creates them as needed. They will have the same value, but will be different objects.
     assertTrue (l.dict == l2.dict);
-    assertTrue (dict.lookupLabel("TEST1") == l.theLabel);
-    assertTrue (dict.lookupLabel("TEST1") == l2.theLabel);
-    assertTrue (l.theLabel == l2.theLabel);
-  }
-
-  public static Test suite ()
-  {
-    return new TestSuite (TestLabelAlphabet.class);
-  }
-
-
-  public static void main (String[] args) throws Throwable
-  {
-    TestSuite theSuite;
-    if (args.length > 0) {
-      theSuite = new TestSuite ();
-      for (int i = 0; i < args.length; i++) {
-        theSuite.addTest (new TestLabelAlphabet (args[i]));
-      }
-    } else {
-      theSuite = (TestSuite) TestLabelAlphabet.suite ();
-    }
-
-    junit.textui.TestRunner.run (theSuite);
+    assertTrue (dict.lookupLabel("TEST1").equals(l.theLabel));
+    assertTrue (dict.lookupLabel("TEST1").equals(l2.theLabel));
+    assertTrue (l.theLabel.equals(l2.theLabel));
   }
 
 }

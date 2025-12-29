@@ -8,29 +8,33 @@
 
 
 
-/** 
+/**
    @author Aron Culotta <a href="mailto:culotta@cs.umass.edu">culotta@cs.umass.edu</a>
  */
 
-package cc.mallet.pipe.iterator.tests;
+package cc.mallet.pipe.iterator;
 
-import junit.framework.*;
+import static org.junit.Assert.*;
+
 import java.util.Iterator;
-import java.util.regex.*;
+import java.util.regex.Pattern;
 
-import cc.mallet.pipe.iterator.*;
-import cc.mallet.types.*;
+import org.junit.Before;
+import org.junit.Test;
 
-public class TestPatternMatchIterator extends TestCase
+import com.google.errorprone.annotations.Var;
+
+import cc.mallet.pipe.iterator.PatternMatchIterator;
+import cc.mallet.types.Instance;
+
+public class TestPatternMatchIterator
 {
-  public TestPatternMatchIterator (String name) {
-    super (name);
-  }
-  
   String data = "<p>Inside inside inside</p> outside <p>inside\ninside</p> outside\noutside";
-  
+
+  @Test
   public void testOne () {
     Iterator iter = new PatternMatchIterator( data, Pattern.compile("<p>(.+?)</p>", Pattern.DOTALL));
+    @Var
     int i=0;
     while (iter.hasNext()) {
       Instance inst = (Instance) iter.next();
@@ -41,19 +45,10 @@ public class TestPatternMatchIterator extends TestCase
         assertTrue (inst.getData().equals("inside\ninside"));
     }
   }
-  
-  public static Test suite ()
-  {
-    return new TestSuite (TestPatternMatchIterator.class);
-  }
-  
-  protected void setUp ()
+
+  @Before
+  public void setUp ()
   {
   }
-  
-  public static void main (String[] args)
-  {
-    junit.textui.TestRunner.run (suite());
-  }
-	
+
 }

@@ -4,21 +4,15 @@
    This software is provided under the terms of the Common Public License,
    version 1.0, as published by http://www.opensource.org.  For further
    information, see the file `LICENSE' included with this distribution. */
-package cc.mallet.types.tests;
+package cc.mallet.types;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
+import org.junit.Test;
+import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.io.IOException;
-
-import cc.mallet.types.MatrixOps;
-import cc.mallet.types.Matrixn;
 import cc.mallet.types.SparseMatrixn;
-
-import gnu.trove.TIntArrayList;
-import gnu.trove.TDoubleArrayList;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.DoubleArrayList;
 
 /**
  * Created: Aug 30, 2004
@@ -26,13 +20,9 @@ import gnu.trove.TDoubleArrayList;
  * @author <A HREF="mailto:casutton@cs.umass.edu>casutton@cs.umass.edu</A>
  * @version $Id: TestSparseMatrixn.java,v 1.1 2007/10/22 21:37:55 mccallum Exp $
  */
-public class TestSparseMatrixn extends TestCase {
+public class TestSparseMatrixn {
 
-  public TestSparseMatrixn (String name)
-  {
-    super (name);
-  }
-
+  @Test
   public void testIndexing1d ()
   {
     double m1[] = new double[]{1.0, 2.0, 3.0, 4.0};
@@ -43,6 +33,7 @@ public class TestSparseMatrixn extends TestCase {
     assertEquals (3, a.singleIndex (idx1));
   }
 
+  @Test
   public void testIndexing2d ()
   {
     int[] sizes = new int[]{2, 3};
@@ -61,6 +52,7 @@ public class TestSparseMatrixn extends TestCase {
     assertEquals (10.0, a.value (idx1), 1e-12);
   }
 
+  @Test
   public void testIndexing3d ()
   {
     SparseMatrixn a = make3dMatrix ();
@@ -80,8 +72,8 @@ public class TestSparseMatrixn extends TestCase {
   private SparseMatrixn make3dMatrix ()
   {
     int[] sizes = new int[]{2, 3, 4};
-    TIntArrayList idxs = new TIntArrayList ();
-    TDoubleArrayList vals = new TDoubleArrayList ();
+    IntArrayList idxs = new IntArrayList ();
+    DoubleArrayList vals = new DoubleArrayList ();
 
     for (int i = 0; i < 24; i++) {
       if (i % 3 != 0) {
@@ -90,10 +82,11 @@ public class TestSparseMatrixn extends TestCase {
       }
     }
 
-    SparseMatrixn a = new SparseMatrixn (sizes, idxs.toNativeArray (), vals.toNativeArray ());
+    SparseMatrixn a = new SparseMatrixn (sizes, idxs.toArray (), vals.toArray ());
     return a;
   }
 
+  @Test
   public void testSparseMatrixnSerializable () throws IOException, ClassNotFoundException
   {
     SparseMatrixn a = make3dMatrix ();
@@ -110,26 +103,6 @@ public class TestSparseMatrixn extends TestCase {
       assertTrue (Arrays.equals (idxa, idxb));
       assertEquals (a.value (idxa), b.value (idxb), 1e-12);
     }
-  }
-  
-  public static Test suite ()
-  {
-    return new TestSuite (TestSparseMatrixn.class);
-  }
-
-  public static void main (String[] args) throws Throwable
-  {
-    TestSuite theSuite;
-    if (args.length > 0) {
-      theSuite = new TestSuite ();
-      for (int i = 0; i < args.length; i++) {
-        theSuite.addTest (new TestSparseMatrixn (args[i]));
-      }
-    } else {
-      theSuite = (TestSuite) suite ();
-    }
-
-    junit.textui.TestRunner.run (theSuite);
   }
 
 }

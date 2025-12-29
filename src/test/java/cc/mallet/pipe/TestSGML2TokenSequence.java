@@ -8,27 +8,27 @@
 
 
 
-/** 
+/**
    @author Aron Culotta <a href="mailto:culotta@cs.umass.edu">culotta@cs.umass.edu</a>
  */
 
-package cc.mallet.pipe.tests;
+package cc.mallet.pipe;
 
-import junit.framework.*;
-import java.util.ArrayList;
-import java.util.regex.*;
+import static org.junit.Assert.*;
 
-import cc.mallet.pipe.*;
-import cc.mallet.pipe.iterator.*;
-import cc.mallet.pipe.tsf.*;
-import cc.mallet.types.*;
+import org.junit.Before;
+import org.junit.Test;
 
-public class TestSGML2TokenSequence extends TestCase
+import cc.mallet.pipe.Input2CharSequence;
+import cc.mallet.pipe.Pipe;
+import cc.mallet.pipe.SGML2TokenSequence;
+import cc.mallet.pipe.SerialPipes;
+import cc.mallet.pipe.iterator.ArrayIterator;
+import cc.mallet.types.Instance;
+import cc.mallet.types.TokenSequence;
+
+public class TestSGML2TokenSequence
 {
-	public TestSGML2TokenSequence (String name) {
-		super (name);
-	}
-
 	String[] dataWithTags = new String[] {
 		"zeroth test string",
 		"<tag>first</tag> test string",
@@ -42,7 +42,7 @@ public class TestSGML2TokenSequence extends TestCase
 		"second test string",
 		"third test string",
 	};
-	
+
 	String[] tags = new String[] {
 		"O O O",
 		"tag O O ",
@@ -53,15 +53,16 @@ public class TestSGML2TokenSequence extends TestCase
 	public static class Array2ArrayIterator extends Pipe
 	{
 		public Instance pipe (Instance carrier) {
-			carrier.setData(new ArrayIterator ((Object[])carrier.getData()));
+			carrier.setData(new ArrayIterator((Object[])carrier.getData()));
 			return carrier;
 		}
 	}
-	
+
+	@Test
 	public void testOne ()
 	{
-		Pipe p = new SerialPipes (new Pipe[] {
-			new Input2CharSequence (),
+		Pipe p = new SerialPipes(new Pipe[] {
+			new Input2CharSequence(),
 			new SGML2TokenSequence()
 		});
 		for (int i=0; i < dataWithTags.length; i++) {
@@ -78,19 +79,10 @@ public class TestSGML2TokenSequence extends TestCase
 			}
 		}
 	}
-	
-	public static Test suite ()
-	{
-		return new TestSuite (TestSGML2TokenSequence.class);
-	}
 
-	protected void setUp ()
+	@Before
+	public void setUp ()
 	{
 	}
 
-	public static void main (String[] args)
-	{
-		junit.textui.TestRunner.run (suite());
-	}
-	
 }

@@ -8,29 +8,27 @@
 
 
 
-/** 
+/**
    @author Andrew McCallum <a href="mailto:mccallum@cs.umass.edu">mccallum@cs.umass.edu</a>
  */
 
-package cc.mallet.types.tests;
+package cc.mallet.types;
 
 import cc.mallet.types.Alphabet;
 import cc.mallet.types.FeatureSequence;
 import cc.mallet.types.FeatureVector;
-import junit.framework.*;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class TestFeatureVector extends TestCase
+public class TestFeatureVector
 {
-	public TestFeatureVector (String name)
-	{
-		super (name);
-	}
-
 	Alphabet dict;
 	FeatureSequence fs;
 	FeatureVector fv;
-	
-	protected void setUp ()
+
+	@Before
+	public void setUp ()
 	{
 		dict = new Alphabet ();
 		fs = new FeatureSequence (dict, 2);
@@ -48,35 +46,25 @@ public class TestFeatureVector extends TestCase
 		fs.add (dict.lookupIndex ("l"));
 		fs.add (dict.lookupIndex ("u"));
 		fs.add (dict.lookupIndex ("m"));
-		//System.out.println (fs.toString());
 		fv = new FeatureVector (fs);
-		//System.out.println (fs.toString());
-		//System.out.println (fv.toString());
 	}
 
+	@Test
 	public void testDuplicateValueFromFeatureSequence ()
 	{
 		assertTrue (fv.value (dict.lookupIndex ("a")) == 2.0);
 	}
 
+	@Test
 	public void testSingleValueFromFeatureSequence ()
 	{
 		assertTrue (fv.value (dict.lookupIndex ("n")) == 1.0);
 	}
 
+	@Test
 	public void testSizeFromFeatureSequence ()
 	{
 		assertTrue (fv.numLocations() == 10);
 	}
-	
-	public static Test suite ()
-	{
-		return new TestSuite (TestFeatureVector.class);
-	}
 
-	public static void main (String[] args)
-	{
-		junit.textui.TestRunner.run (suite());
-	}
-	
 }

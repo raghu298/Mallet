@@ -4,13 +4,14 @@
    This software is provided under the terms of the Common Public License,
    version 1.0, as published by http://www.opensource.org.  For further
    information, see the file `LICENSE' included with this distribution. */
-package cc.mallet.types.tests;
+package cc.mallet.types;
 
 import cc.mallet.types.Alphabet;
 import cc.mallet.types.AugmentableFeatureVector;
 import cc.mallet.types.FeatureVector;
 import cc.mallet.types.SparseVector;
-import junit.framework.*;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Created: Dec 30, 2004
@@ -18,18 +19,9 @@ import junit.framework.*;
  * @author <A HREF="mailto:casutton@cs.umass.edu>casutton@cs.umass.edu</A>
  * @version $Id: TestAugmentableFeatureVector.java,v 1.1 2007/10/22 21:37:55 mccallum Exp $
  */
-public class TestAugmentableFeatureVector extends TestCase {
+public class TestAugmentableFeatureVector {
 
-  public TestAugmentableFeatureVector (String name)
-  {
-    super (name);
-  }
-
-  public static Test suite ()
-  {
-    return new TestSuite (TestAugmentableFeatureVector.class);
-  }
-
+  @Test
   public void testDotProductBinaryToSV ()
   {
     SparseVector v = makeSparseVectorToN (5);
@@ -39,6 +31,7 @@ public class TestAugmentableFeatureVector extends TestCase {
     new AugmentableFeatureVector (new Alphabet(), true);
   }
 
+  @Test
   public void testDotProductSparseASVToSV ()
   {
     SparseVector v = makeSparseVectorToN (7);
@@ -70,6 +63,7 @@ public class TestAugmentableFeatureVector extends TestCase {
     return new SparseVector (vals);
   }
 
+  @Test
   public void testAddWithPrefix ()
   {
     Alphabet dict = new Alphabet ();
@@ -86,21 +80,6 @@ public class TestAugmentableFeatureVector extends TestCase {
     assertEquals (4, dict.size());
     assertEquals (2, afv.getAlphabet ().size());
     assertEquals ("O:ONE\nO:THREE\n", afv.toString ());
-  }
-
-  public static void main (String[] args) throws Throwable
-  {
-    TestSuite theSuite;
-    if (args.length > 0) {
-      theSuite = new TestSuite ();
-      for (int i = 0; i < args.length; i++) {
-        theSuite.addTest (new TestAugmentableFeatureVector (args[i]));
-      }
-    } else {
-      theSuite = (TestSuite) suite ();
-    }
-
-    junit.textui.TestRunner.run (theSuite);
   }
 
 }

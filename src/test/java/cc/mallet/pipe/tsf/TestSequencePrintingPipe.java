@@ -4,17 +4,23 @@
    This software is provided under the terms of the Common Public License,
    version 1.0, as published by http://www.opensource.org.  For further
    information, see the file `LICENSE' included with this distribution. */
-package cc.mallet.pipe.tsf.tests;
+package cc.mallet.pipe.tsf;
 
-import junit.framework.*;
+import static org.junit.Assert.*;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.junit.Test;
+
 import cc.mallet.pipe.Pipe;
-import cc.mallet.pipe.SerialPipes;
 import cc.mallet.pipe.tsf.SequencePrintingPipe;
-import cc.mallet.types.*;
+import cc.mallet.types.Alphabet;
+import cc.mallet.types.FeatureVector;
+import cc.mallet.types.FeatureVectorSequence;
+import cc.mallet.types.Instance;
+import cc.mallet.types.LabelAlphabet;
+import cc.mallet.types.LabelSequence;
 
 /**
  * Created: Jul 8, 2005
@@ -22,19 +28,10 @@ import cc.mallet.types.*;
  * @author <A HREF="mailto:casutton@cs.umass.edu>casutton@cs.umass.edu</A>
  * @version $Id: TestSequencePrintingPipe.java,v 1.1 2007/10/22 21:37:57 mccallum Exp $
  */
-public class TestSequencePrintingPipe extends TestCase {
+public class TestSequencePrintingPipe {
 
-  public TestSequencePrintingPipe (String name)
-  {
-    super (name);
-  }
-
-  public static Test suite ()
-  {
-    return new TestSuite (TestSequencePrintingPipe.class);
-  }
-
-  public static void testPrinting ()
+  @Test
+  public void testPrinting ()
   {
     Alphabet dict = dictOfSize (3);
     FeatureVector[] vecs = new FeatureVector[] {
@@ -72,7 +69,7 @@ public class TestSequencePrintingPipe extends TestCase {
             "\n" +
             "LABEL2 feature1\n" +
             "LABEL1 feature0\n\n",
-            sw.toString());
+            sw.toString().replaceAll("\\r\\n?", "\n"));
   }
 
   private static Alphabet dictOfSize (int n)
@@ -91,21 +88,6 @@ public class TestSequencePrintingPipe extends TestCase {
       dict.lookupIndex ("LABEL"+i);
     }
     return dict;
-  }
-
-  public static void main (String[] args) throws Throwable
-  {
-    TestSuite theSuite;
-    if (args.length > 0) {
-      theSuite = new TestSuite ();
-      for (int i = 0; i < args.length; i++) {
-        theSuite.addTest (new TestSequencePrintingPipe (args[i]));
-      }
-    } else {
-      theSuite = (TestSuite) suite ();
-    }
-
-    junit.textui.TestRunner.run (theSuite);
   }
 
 }
