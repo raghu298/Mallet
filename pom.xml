@@ -48,8 +48,8 @@
     <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
   </properties>
   <build>
-    <sourceDirectory>src</sourceDirectory>
-    <testSourceDirectory>src</testSourceDirectory>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <testSourceDirectory>src/test/java</testSourceDirectory>
 
     <plugins>
 
