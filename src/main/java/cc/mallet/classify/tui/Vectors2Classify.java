@@ -13,23 +13,10 @@ package cc.mallet.classify.tui;
 
 
 
-import com.google.errorprone.annotations.Var;
-
-import cc.mallet.classify.Classification;
-import cc.mallet.classify.Classifier;
-import  cc.mallet.util.JShellInterpreter;
-import cc.mallet.classify.ClassifierTrainer;
-import cc.mallet.classify.Trial;
-import cc.mallet.classify.evaluate.ConfusionMatrix;
-import cc.mallet.types.CrossValidationIterator;
-import cc.mallet.types.Instance;
-import cc.mallet.types.InstanceList;
-import cc.mallet.types.Labeling;
-import cc.mallet.types.MatrixOps;
-import cc.mallet.util.CommandOption;
-import cc.mallet.util.MalletLogger;
-import cc.mallet.util.MalletProgressMessageLogger;
-import cc.mallet.util.ProgressMessageLogFormatter;
+import java.io.*;
+import java.util.*;
+import java.util.logging.*;
+import java.lang.reflect.*;
 
 import cc.mallet.classify.*;
 import cc.mallet.classify.evaluate.*;

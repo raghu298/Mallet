@@ -20,8 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import cc.mallet.grmm.types.*;
 
 import gnu.trove.THashMap;
-import bsh.Interpreter;
-import bsh.EvalError;
+import cc.mallet.util.JShellInterpreter;
 
 /**
  * $Id: ModelReader.java,v 1.1 2007/10/22 21:37:58 mccallum Exp $
@@ -46,7 +45,7 @@ public class ModelReader {
   public static Assignment readFromMatrix (VarSet vars, Reader in) throws IOException
   {
     Variable[] varr = vars.toVariableArray ();
-    Interpreter interpreter = new Interpreter ();
+    JShellInterpreter interpreter = new JShellInterpreter ();
     BufferedReader bIn = new BufferedReader (in);
     Assignment assn = new Assignment ();
     String line;
@@ -57,7 +56,7 @@ public class ModelReader {
       for (int i = 0; i < fields.length; i++) {
         try {
           vals[i] = interpreter.eval (fields[i]);
-        } catch (EvalError e) {
+        } catch (Exception e) {
           throw new RuntimeException ("Error reading line: "+line, e);
         }
       }

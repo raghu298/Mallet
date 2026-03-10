@@ -21,6 +21,7 @@ import java.util.logging.*;
 import java.util.Random;
 
 import cc.mallet.types.*;
+import cc.mallet.optimize.Optimizable;
 import cc.mallet.util.*;
 
 /**

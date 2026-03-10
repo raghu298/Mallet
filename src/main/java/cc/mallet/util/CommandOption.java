@@ -19,7 +19,7 @@ import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import cc.mallet.util.BshInterpreter;
+import cc.mallet.util.JShellInterpreter;
 
 
 public abstract class CommandOption

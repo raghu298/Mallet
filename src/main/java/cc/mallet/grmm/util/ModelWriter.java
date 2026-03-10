@@ -19,8 +19,6 @@ import java.lang.reflect.InvocationTargetException;
 import cc.mallet.grmm.types.*;
 
 import gnu.trove.THashMap;
-import bsh.Interpreter;
-import bsh.EvalError;
 
 /**
  * $Id: ModelReader.java,v 1.1 2007/10/22 21:37:58 mccallum Exp $

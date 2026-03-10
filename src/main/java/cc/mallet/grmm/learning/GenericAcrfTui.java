@@ -13,8 +13,6 @@ package cc.mallet.grmm.learning;
  * @version $Id: GenericAcrfTui.java,v 1.1 2007/10/22 21:37:43 mccallum Exp $
  */
 
-import bsh.EvalError;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -90,7 +88,7 @@ public class GenericAcrfTui {
 	 "The random seed for randomly selecting a proportion of the instance list for training", null);
 
 
-  private static BshInterpreter interpreter = setupInterpreter ();
+  private static JShellInterpreter interpreter = setupInterpreter ();
 
     private static ACRFTrainer createTrainer ()
     {
@@ -105,7 +103,7 @@ public class GenericAcrfTui {
       }
     }
 
-  public static void main (String[] args) throws IOException, EvalError
+  public static void main (String[] args) throws IOException, Exception
   {
     doProcessOptions (GenericAcrfTui.class, args);
     Timing timing = new Timing ();
@@ -159,22 +157,22 @@ public class GenericAcrfTui {
     System.err.println ("Total time (ms) = " + timing.elapsedTime ());
   }
 
-  private static BshInterpreter setupInterpreter ()
+  private static JShellInterpreter setupInterpreter ()
   {
-    BshInterpreter interpreter = CommandOption.getInterpreter ();
+    JShellInterpreter interpreter = CommandOption.getInterpreter ();
     try {
       interpreter.eval ("import cc.mallet.base.extract.*");
       interpreter.eval ("import cc.mallet.grmm.inference.*");
       interpreter.eval ("import cc.mallet.grmm.learning.*");
       interpreter.eval ("import cc.mallet.grmm.learning.templates.*");
-    } catch (EvalError e) {
+    } catch (Exception e) {
       throw new RuntimeException (e);
     }
 
     return interpreter;
   }
 
-  public static ACRFEvaluator createEvaluator (String spec) throws EvalError
+  public static ACRFEvaluator createEvaluator (String spec) throws Exception
   {
     if (spec.indexOf ('(') >= 0) {
       // assume it's Java code, and don't screw with it.
@@ -219,7 +217,7 @@ public class GenericAcrfTui {
     }
   }
 
-  private static Inferencer createInferencer (String spec) throws EvalError
+  private static Inferencer createInferencer (String spec) throws Exception
   {
     String cmd;
     if (spec.indexOf ('(') >= 0) {
@@ -247,7 +245,7 @@ public class GenericAcrfTui {
     options.logOptions (Logger.getLogger (""));
   }
 
-  private static ACRF.Template[] parseModelFile (File mdlFile) throws IOException, EvalError
+  private static ACRF.Template[] parseModelFile (File mdlFile) throws IOException, Exception
   {
     BufferedReader in = new BufferedReader (new FileReader (mdlFile));
 

@@ -13,8 +13,6 @@ package cc.mallet.grmm.learning.extract;
  * @version $Id: AcrfExtractorTui.java,v 1.1 2007/10/22 21:38:02 mccallum Exp $
  */
 
-import bsh.EvalError;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -117,9 +115,9 @@ public class AcrfExtractorTui {
           (AcrfExtractorTui.class, "data-dir", "FILENAME", true, null, "If training-is-list, base directory in which training files located.", null);
 
 
-  private static BshInterpreter interpreter = setupInterpreter ();
+  private static JShellInterpreter interpreter = setupInterpreter ();
 
-  public static void main (String[] args) throws IOException, EvalError
+  public static void main (String[] args) throws IOException, Exception
   {
     doProcessOptions (AcrfExtractorTui.class, args);
     Timing timing = new Timing ();
@@ -193,16 +191,16 @@ public class AcrfExtractorTui {
     System.out.println ("Total time (ms) = " + timing.elapsedTime ());
   }
 
-  private static BshInterpreter setupInterpreter ()
+  private static JShellInterpreter setupInterpreter ()
   {
-    BshInterpreter interpreter = CommandOption.getInterpreter ();
+    JShellInterpreter interpreter = CommandOption.getInterpreter ();
     try {
       interpreter.eval ("import edu.umass.cs.mallet.base.extract.*");
       interpreter.eval ("import edu.umass.cs.mallet.grmm.inference.*");
       interpreter.eval ("import edu.umass.cs.mallet.grmm.learning.*");
       interpreter.eval ("import edu.umass.cs.mallet.grmm.learning.templates.*");
       interpreter.eval ("import edu.umass.cs.mallet.grmm.learning.extract.*");
-    } catch (EvalError e) {
+    } catch (Exception e) {
       throw new RuntimeException (e);
     }
 
@@ -219,7 +217,7 @@ public class AcrfExtractorTui {
     }
   }
 
-  public static ACRFEvaluator createEvaluator (String spec) throws EvalError
+  public static ACRFEvaluator createEvaluator (String spec) throws Exception
   {
     if (spec.indexOf ('(') >= 0) {
       // assume it's Java code, and don't screw with it.
@@ -230,7 +228,7 @@ public class AcrfExtractorTui {
     }
   }
 
-  private static ExtractionEvaluator createExtractionEvaluator (String spec) throws EvalError
+  private static ExtractionEvaluator createExtractionEvaluator (String spec) throws Exception
   {
     if (spec.indexOf ('(') >= 0) {
       // assume it's Java code, and don't screw with it.
@@ -275,7 +273,7 @@ public class AcrfExtractorTui {
     }
   }
 
-  private static ACRFExtractorTrainer createTrainer (String spec) throws EvalError
+  private static ACRFExtractorTrainer createTrainer (String spec) throws Exception
   {
     String cmd;
     if (spec.indexOf ('(') >= 0) {
@@ -297,7 +295,7 @@ public class AcrfExtractorTui {
     else throw new RuntimeException ("Don't know what to do with trainer "+trainer);
   }
 
-  private static Inferencer createInferencer (String spec) throws EvalError
+  private static Inferencer createInferencer (String spec) throws Exception
   {
     String cmd;
     if (spec.indexOf ('(') >= 0) {
@@ -325,7 +323,7 @@ public class AcrfExtractorTui {
     options.logOptions (Logger.getLogger (""));
   }
 
-  private static ACRF.Template[] parseModelFile (File mdlFile) throws IOException, EvalError
+  private static ACRF.Template[] parseModelFile (File mdlFile) throws IOException, Exception
   {
     BufferedReader in = new BufferedReader (new FileReader (mdlFile));
 
