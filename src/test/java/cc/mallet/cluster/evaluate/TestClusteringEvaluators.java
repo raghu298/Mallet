@@ -5,9 +5,10 @@
    version 1.0, as published by http://www.opensource.org.  For further
    information, see the file `LICENSE' included with this distribution. */
 
-package cc.mallet.cluster.evaluate.tests;
+package cc.mallet.cluster.evaluate;
 
 import cc.mallet.cluster.Clustering;
+import cc.mallet.cluster.evaluate.*;
 import cc.mallet.types.InstanceList;
 import cc.mallet.util.Randoms;
 

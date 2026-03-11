@@ -5,7 +5,7 @@
  version 1.0, as published by http://www.opensource.org.  For further
  information, see the file `LICENSE' included with this distribution. */
 
-package cc.mallet.optimize.tests;
+package cc.mallet.optimize;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

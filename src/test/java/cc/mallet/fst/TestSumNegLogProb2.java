@@ -12,7 +12,7 @@
    @author Andrew McCallum <a href="mailto:mccallum@cs.umass.edu">mccallum@cs.umass.edu</a>
  */
 
-package cc.mallet.fst.tests;
+package cc.mallet.fst;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

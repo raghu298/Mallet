@@ -19,7 +19,7 @@ import cc.mallet.fst.MEMM;
 import cc.mallet.fst.MEMMTrainer;
 import cc.mallet.fst.SumLatticeDefault;
 import cc.mallet.optimize.Optimizable;
-import cc.mallet.optimize.TestOptimizable;
+import cc.mallet.optimize.tests.TestOptimizable;
 import cc.mallet.pipe.CharSequence2TokenSequence;
 import cc.mallet.pipe.Pipe;
 import cc.mallet.pipe.PrintInputAndTarget;

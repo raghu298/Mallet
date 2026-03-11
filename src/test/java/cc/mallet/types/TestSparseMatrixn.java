@@ -11,8 +11,6 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.io.IOException;
 import cc.mallet.types.SparseMatrixn;
-import com.carrotsearch.hppc.IntArrayList;
-import com.carrotsearch.hppc.DoubleArrayList;
 
 /**
  * Created: Aug 30, 2004
@@ -72,17 +70,24 @@ public class TestSparseMatrixn {
   private SparseMatrixn make3dMatrix ()
   {
     int[] sizes = new int[]{2, 3, 4};
-    IntArrayList idxs = new IntArrayList ();
-    DoubleArrayList vals = new DoubleArrayList ();
-
+    int idxCount = 0;
     for (int i = 0; i < 24; i++) {
       if (i % 3 != 0) {
-        idxs.add (i);
-        vals.add (2.0 * i);
+        idxCount++;
+      }
+    }
+    int[] idxs = new int[idxCount];
+    double[] vals = new double[idxCount];
+    int pos = 0;
+    for (int i = 0; i < 24; i++) {
+      if (i % 3 != 0) {
+        idxs[pos] = i;
+        vals[pos] = 2.0 * i;
+        pos++;
       }
     }
 
-    SparseMatrixn a = new SparseMatrixn (sizes, idxs.toArray (), vals.toArray ());
+    SparseMatrixn a = new SparseMatrixn (sizes, idxs, vals);
     return a;
   }
 

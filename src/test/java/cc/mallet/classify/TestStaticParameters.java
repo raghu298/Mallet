@@ -1,4 +1,4 @@
-package cc.mallet.classify.tests;
+package cc.mallet.classify;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

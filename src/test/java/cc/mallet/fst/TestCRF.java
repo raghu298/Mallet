@@ -9,7 +9,7 @@
  @author Andrew McCallum <a href="mailto:mccallum@cs.umass.edu">mccallum@cs.umass.edu</a>
  */
 
-package cc.mallet.fst.tests;
+package cc.mallet.fst;
 
 import java.io.File;
 import java.io.FileInputStream;

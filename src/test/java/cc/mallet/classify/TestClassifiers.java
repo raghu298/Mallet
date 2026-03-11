@@ -12,7 +12,7 @@
    @author Andrew McCallum <a href="mailto:mccallum@cs.umass.edu">mccallum@cs.umass.edu</a>
  */
 
-package cc.mallet.classify.tests;
+package cc.mallet.classify;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 import java.util.Iterator;
 
 import cc.mallet.pipe.iterator.RandomTokenSequenceIterator;
+import cc.mallet.classify.*;
 import cc.mallet.types.*;
 import cc.mallet.util.*;
 
